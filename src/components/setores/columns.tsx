@@ -1,0 +1,59 @@
+"use client"
+
+import { ColumnDef } from "@tanstack/react-table"
+import { Button } from "../ui/button"
+import { MoreHorizontal } from "lucide-react"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { SetorEntidade } from "@/lib/types/entidades/setorEntidade"
+
+interface ChamadosColumnProps {
+    onEdit: (id: string) => void;
+    onDelete?: (id: string) => void;
+}
+
+export const columns = ({ onEdit, onDelete }: ChamadosColumnProps): ColumnDef<SetorEntidade>[] => [
+    {
+        accessorKey: "nome",
+        header: "Nome",
+    },
+    {
+        accessorKey: "email",
+        header: "E-mail",
+    },
+    {
+        accessorKey: "responsavel.nome",
+        header: "Responsável",
+        cell: ({ row }) => {
+            const responsavel = row.original.responsavel?.nome
+            return responsavel ? responsavel : "N/A"
+        },
+    },
+    {
+        header: "Ações",
+        cell: ({ row }) => {
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Abrir menu</span>
+                            <MoreHorizontal />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => onEdit(row.original.id)}>Editar</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onDelete?.(row.original.id)}>Excluir</DropdownMenuItem>
+
+                    </DropdownMenuContent>
+                </DropdownMenu>)
+        }
+    }
+]
