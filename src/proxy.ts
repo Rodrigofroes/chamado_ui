@@ -46,7 +46,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (token && pathname === AUTH.rota) {
+  if (token && pathname === AUTH.rota || pathname === '/') {
     if (usuario?.tipo === TIPO_USUARIO_MIDDLEWARE.ADMIN.toString()) {
       url.pathname = ROUTES_ADMIN[0].rota
     } else {
